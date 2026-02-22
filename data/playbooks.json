@@ -1,0 +1,54 @@
+{
+  "playbooks": [
+    {
+      "id": "ai-video-factory",
+      "name": "AI Video Factory Playbook",
+      "useCase": "Automated AI video creation from a single prompt",
+      "price": 29,
+      "upsell": "AI Agent Starter Kit ($1,997)",
+      "status": "ready",
+      "source": "LinkedIn viral post - Mike Futia",
+      "landingUrl": "/ai-video-factory/",
+      "stripeProductId": null,
+      "createdAt": "2026-02-22T12:00:00Z"
+    },
+    {
+      "id": "ai-ad-manager",
+      "name": "AI Ad Manager Playbook",
+      "useCase": "Claude + Ryze for autonomous Google Ads management",
+      "price": 47,
+      "upsell": "AI Agent Starter Kit ($1,997)",
+      "status": "ready",
+      "source": "LinkedIn viral post - Jayant Joshi",
+      "landingUrl": "/ai-ad-manager/",
+      "stripeProductId": null,
+      "createdAt": "2026-02-22T12:00:00Z"
+    },
+    {
+      "id": "ai-creative-machine",
+      "name": "AI Creative Machine Playbook",
+      "useCase": "Generate 50+ ad variants without UGC creators",
+      "price": 29,
+      "upsell": "Agency Bundle ($4,497)",
+      "status": "ready",
+      "source": "LinkedIn viral post - Yinan Na",
+      "landingUrl": "/ai-creative-machine/",
+      "stripeProductId": null,
+      "createdAt": "2026-02-22T12:00:00Z"
+    }
+  ],
+  "upsellProducts": [
+    {
+      "id": "starter-kit",
+      "name": "AI Agent Starter Kit",
+      "price": 1997,
+      "description": "2-agent setup with full onboarding"
+    },
+    {
+      "id": "agency-bundle",
+      "name": "Agency Bundle",
+      "price": 4497,
+      "description": "Multi-client + white-label options"
+    }
+  ]
+}

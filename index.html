@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gaudi Dashboard - AI Agents Enterprise</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; background: #0a0a0a; color: #e5e5e5; min-height: 100vh; }
+        .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 20px 40px; border-bottom: 1px solid #333; }
+        .header h1 { font-size: 28px; font-weight: 700; }
+        .header .subtitle { color: #888; font-size: 14px; margin-top: 4px; }
+        .stats-bar { display: flex; gap: 20px; padding: 20px 40px; background: #111; border-bottom: 1px solid #222; }
+        .stat-card { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 20px; min-width: 180px; }
+        .stat-card .label { color: #888; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-card .value { font-size: 32px; font-weight: 700; margin-top: 8px; }
+        .stat-card.revenue .value { color: #10b981; }
+        .stat-card.pipeline .value { color: #f59e0b; }
+        .stat-card.leads .value { color: #3b82f6; }
+        .stat-card.tasks .value { color: #ec4899; }
+        .main { display: grid; grid-template-columns: 280px 1fr; min-height: calc(100vh - 140px); }
+        .sidebar { background: #111; border-right: 1px solid #222; padding: 20px 0; }
+        .nav-item { padding: 12px 24px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: background 0.2s; }
+        .nav-item:hover { background: #1a1a1a; }
+        .nav-item.active { background: #1a1a2e; border-left: 3px solid #6366f1; }
+        .nav-item .icon { width: 20px; text-align: center; }
+        .content { padding: 30px 40px; overflow-y: auto; }
+        .section { display: none; }
+        .section.active { display: block; }
+        .section-title { font-size: 24px; font-weight: 600; margin-bottom: 20px; }
+        .card { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .card-title { font-size: 16px; font-weight: 600; }
+        .badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+        .badge.draft { background: #374151; color: #9ca3af; }
+        .badge.ready { background: #065f46; color: #6ee7b7; }
+        .badge.pending { background: #78350f; color: #fcd34d; }
+        .badge.approved { background: #1e3a5f; color: #93c5fd; }
+        .badge.sent { background: #4c1d95; color: #c4b5fd; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #333; }
+        th { color: #888; font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .btn { padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s; }
+        .btn-primary { background: #6366f1; color: white; }
+        .btn-primary:hover { background: #4f46e5; }
+        .btn-secondary { background: #374151; color: #e5e5e5; }
+        .btn-secondary:hover { background: #4b5563; }
+        .btn-success { background: #059669; color: white; }
+        .btn-success:hover { background: #047857; }
+        .btn-warning { background: #d97706; color: white; }
+        .approval-item { display: flex; justify-content: space-between; align-items: center; padding: 16px; border: 1px solid #333; border-radius: 8px; margin-bottom: 12px; background: #1f1f1f; }
+        .approval-info h4 { font-size: 15px; margin-bottom: 4px; }
+        .approval-info p { color: #888; font-size: 13px; }
+        .progress-bar { height: 8px; background: #333; border-radius: 4px; overflow: hidden; margin-top: 8px; }
+        .progress-bar .fill { height: 100%; background: linear-gradient(90deg, #6366f1, #8b5cf6); border-radius: 4px; }
+        .empty-state { text-align: center; padding: 60px 20px; color: #666; }
+        .empty-state .icon { font-size: 48px; margin-bottom: 16px; }
+        .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+        .tab { padding: 10px 20px; background: #1a1a1a; border: 1px solid #333; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+        .tab:hover { background: #252525; }
+        .tab.active { background: #6366f1; border-color: #6366f1; }
+        .playbook-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .playbook-card { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 20px; }
+        .playbook-card h3 { font-size: 16px; margin-bottom: 8px; }
+        .playbook-card .use-case { color: #888; font-size: 13px; margin-bottom: 12px; }
+        .playbook-card .price { font-size: 24px; font-weight: 700; color: #10b981; }
+        .playbook-card .upsell { font-size: 12px; color: #888; margin-top: 8px; }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+        .status-dot.green { background: #10b981; }
+        .status-dot.yellow { background: #f59e0b; }
+        .status-dot.red { background: #ef4444; }
+        .crm-row:hover { background: #1f1f1f; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏛️ Gaudi Dashboard</h1>
+        <div class="subtitle">AI Agents Enterprise | Plan A: Playbooks Strategy</div>
+    </div>
+    
+    <div class="stats-bar">
+        <div class="stat-card revenue">
+            <div class="label">Revenue (Feb)</div>
+            <div class="value" id="revenue-value">$0</div>
+        </div>
+        <div class="stat-card pipeline">
+            <div class="label">Pipeline Value</div>
+            <div class="value" id="pipeline-value">$0</div>
+        </div>
+        <div class="stat-card leads">
+            <div class="label">Leads Found</div>
+            <div class="value" id="leads-value">0</div>
+        </div>
+        <div class="stat-card tasks">
+            <div class="label">Pending Tasks</div>
+            <div class="value" id="tasks-value">0</div>
+        </div>
+    </div>
+    
+    <div class="main">
+        <div class="sidebar">
+            <div class="nav-item active" data-section="overview">📊 Overview</div>
+            <div class="nav-item" data-section="playbooks">📚 Playbooks</div>
+            <div class="nav-item" data-section="emails">✉️ Email Templates</div>
+            <div class="nav-item" data-section="landings">🌐 Landing Pages</div>
+            <div class="nav-item" data-section="crm">👥 Leads & CRM</div>
+            <div class="nav-item" data-section="tasks">✅ Tasks</div>
+            <div class="nav-item" data-section="approvals">🔒 Approvals</div>
+        </div>
+        
+        <div class="content">
+            <!-- Overview Section -->
+            <div class="section active" id="overview">
+                <h2 class="section-title">Overview</h2>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">🎯 February Target Progress</span>
+                        <span class="badge pending">In Progress</span>
+                    </div>
+                    <p style="color: #888; margin-bottom: 12px;">Target: $10,000 cash collected by Feb 28, 2026</p>
+                    <div class="progress-bar">
+                        <div class="fill" style="width: 0%"></div>
+                    </div>
+                    <p style="color: #666; font-size: 13px; margin-top: 8px;">6 days remaining</p>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title" style="margin-bottom: 16px;">📈 Strategy Status</div>
+                    <table>
+                        <tr><th>Component</th><th>Status</th><th>Details</th></tr>
+                        <tr><td><span class="status-dot green"></span>Playbooks</td><td><span class="badge ready">3 Created</span></td><td>AI Video Factory, AI Ad Manager, AI Creative Machine</td></tr>
+                        <tr><td><span class="status-dot yellow"></span>Landing Pages</td><td><span class="badge pending">In Progress</span></td><td>Deploying to Cloudflare</td></tr>
+                        <tr><td><span class="status-dot yellow"></span>Email Sequences</td><td><span class="badge pending">In Progress</span></td><td>Templates ready, awaiting approval</td></tr>
+                        <tr><td><span class="status-dot yellow"></span>Lead Scraping</td><td><span class="badge pending">Queued</span></td><td>Ready to scrape LinkedIn posts</td></tr>
+                        <tr><td><span class="status-dot red"></span>Stripe Products</td><td><span class="badge draft">Not Created</span></td><td>Need to create products in Stripe</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title" style="margin-bottom: 16px;">⚡ Quick Actions</div>
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                        <button class="btn btn-primary" onclick="showSection('approvals')">Review Approvals (0)</button>
+                        <button class="btn btn-secondary" onclick="showSection('playbooks')">View Playbooks</button>
+                        <button class="btn btn-secondary" onclick="showSection('crm')">View Leads</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Playbooks Section -->
+            <div class="section" id="playbooks">
+                <h2 class="section-title">📚 Playbooks Catalog</h2>
+                
+                <div class="tabs">
+                    <div class="tab active">All Playbooks</div>
+                    <div class="tab">$29 Price Point</div>
+                    <div class="tab">$47 Price Point</div>
+                </div>
+                
+                <div class="playbook-grid" id="playbooks-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+            
+            <!-- Emails Section -->
+            <div class="section" id="emails">
+                <h2 class="section-title">✉️ Email Templates</h2>
+                
+                <div class="tabs">
+                    <div class="tab active">All Templates</div>
+                    <div class="tab">Cold Outreach</div>
+                    <div class="tab">Follow-up</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title" style="margin-bottom: 16px;">Email Sequences</div>
+                    <table id="emails-table">
+                        <tr><th>Template Name</th><th>Playbook</th><th>Sequence Step</th><th>Status</th><th>Actions</th></tr>
+                        <!-- Populated by JS -->
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title" style="margin-bottom: 16px;">Sending Stats</div>
+                    <table>
+                        <tr><th>Playbook</th><th>Emails Queued</th><th>Emails Sent</th><th>Open Rate</th><th>Click Rate</th></tr>
+                        <tr><td colspan="5" class="empty-state"><div class="icon">📭</div><p>No emails sent yet - campaigns pending approval</p></td></tr>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Landing Pages Section -->
+            <div class="section" id="landings">
+                <h2 class="section-title">🌐 Landing Pages</h2>
+                
+                <div class="card">
+                    <div class="card-title" style="margin-bottom: 16px;">Deployed Pages</div>
+                    <table id="landings-table">
+                        <tr><th>Page Name</th><th>Playbook</th><th>Price</th><th>URL</th><th>Status</th></tr>
+                        <!-- Populated by JS -->
+                    </table>
+                </div>
+            </div>
+            
+            <!-- CRM Section -->
+            <div class="section" id="crm">
+                <h2 class="section-title">👥 Leads & CRM</h2>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Lead Pipeline</span>
+                        <button class="btn btn-primary">+ Add Leads</button>
+                    </div>
+                    <table id="crm-table">
+                        <tr><th>Name</th><th>Company</th><th>Source Post</th><th>Engagement</th><th>Status</th><th>Actions</th></tr>
+                        <!-- Populated by JS -->
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title" style="margin-bottom: 16px;">Lead Sources</div>
+                    <table>
+                        <tr><th>Source</th><th>Leads Found</th><th>Verified Emails</th><th>Ready for Outreach</th></tr>
+                        <tr><td>LinkedIn Post - AI Animated Videos</td><td>0</td><td>0</td><td>0</td></tr>
+                        <tr><td>LinkedIn Post - Claude Cowork</td><td>0</td><td>0</td><td>0</td></tr>
+                        <tr><td>LinkedIn Post - 50 Ad Variations</td><td>0</td><td>0</td><td>0</td></tr>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Tasks Section -->
+            <div class="section" id="tasks">
+                <h2 class="section-title">✅ Tasks</h2>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Task Board</span>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-secondary">To Do</button>
+                            <button class="btn btn-secondary">In Progress</button>
+                            <button class="btn btn-secondary">Done</button>
+                        </div>
+                    </div>
+                    <table id="tasks-table">
+                        <tr><th>Task</th><th>Priority</th><th>Status</th><th>Due</th><th>Notes</th></tr>
+                        <!-- Populated by JS -->
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Approvals Section -->
+            <div class="section" id="approvals">
+                <h2 class="section-title">🔒 Pending Approvals</h2>
+                <p style="color: #888; margin-bottom: 20px;">Review and approve items before campaigns go live</p>
+                
+                <div id="approvals-list">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Data
+        const playbooks = [
+            {
+                id: 'ai-video-factory',
+                name: 'AI Video Factory Playbook',
+                useCase: 'Automated AI video creation from a single prompt',
+                price: 29,
+                upsell: 'AI Agent Starter Kit ($1,997)',
+                status: 'ready',
+                source: 'LinkedIn viral post - Mike Futia'
+            },
+            {
+                id: 'ai-ad-manager',
+                name: 'AI Ad Manager Playbook',
+                useCase: 'Claude + Ryze for autonomous Google Ads management',
+                price: 47,
+                upsell: 'AI Agent Starter Kit ($1,997)',
+                status: 'ready',
+                source: 'LinkedIn viral post - Jayant Joshi'
+            },
+            {
+                id: 'ai-creative-machine',
+                name: 'AI Creative Machine Playbook',
+                useCase: 'Generate 50+ ad variants without UGC creators',
+                price: 29,
+                upsell: 'Agency Bundle ($4,497)',
+                status: 'ready',
+                source: 'LinkedIn viral post - Yinan Na'
+            }
+        ];
+        
+        const emails = [
+            { name: 'AI Video Factory - Initial', playbook: 'AI Video Factory', step: '1/5', status: 'ready' },
+            { name: 'AI Video Factory - Follow-up 1', playbook: 'AI Video Factory', step: '2/5', status: 'ready' },
+            { name: 'AI Video Factory - Follow-up 2', playbook: 'AI Video Factory', step: '3/5', status: 'ready' },
+            { name: 'AI Ad Manager - Initial', playbook: 'AI Ad Manager', step: '1/5', status: 'ready' },
+            { name: 'AI Ad Manager - Follow-up 1', playbook: 'AI Ad Manager', step: '2/5', status: 'ready' },
+            { name: 'AI Creative Machine - Initial', playbook: 'AI Creative Machine', step: '1/5', status: 'ready' }
+        ];
+        
+        const landings = [
+            { name: 'AI Video Factory', playbook: 'AI Video Factory', price: '$29', url: 'Pending deployment', status: 'pending' },
+            { name: 'AI Ad Manager', playbook: 'AI Ad Manager', price: '$47', url: 'Pending deployment', status: 'pending' },
+            { name: 'AI Creative Machine', playbook: 'AI Creative Machine', price: '$29', url: 'Pending deployment', status: 'pending' }
+        ];
+        
+        const tasks = [
+            { task: 'Deploy landing pages to Cloudflare', priority: 'P0', status: 'in-progress', due: 'Today', notes: 'Creating repos and pushing' },
+            { task: 'Create Stripe products for playbooks', priority: 'P0', status: 'todo', due: 'Today', notes: 'Need to configure checkout links' },
+            { task: 'Scrape LinkedIn post commenters', priority: 'P1', status: 'todo', due: 'Today', notes: 'Use Apify to extract profiles' },
+            { task: 'Verify emails with MillionVerifier', priority: 'P1', status: 'blocked', due: 'Today', notes: 'Waiting for leads' },
+            { task: 'Setup Instantly campaigns', priority: 'P1', status: 'todo', due: 'Today', notes: 'Configure sequences' },
+            { task: 'Get approval for campaigns', priority: 'P0', status: 'todo', due: 'Today', notes: 'Present to operator' }
+        ];
+        
+        const approvals = [
+            { id: 1, title: 'Landing Pages Deployment', desc: 'Deploy 3 landing pages to Cloudflare Pages', type: 'deployment' },
+            { id: 2, title: 'Email Campaigns Launch', desc: 'Start Instantly sequences for all 3 playbooks', type: 'campaign' },
+            { id: 3, title: 'Lead Outreach', desc: 'Begin outreach to scraped LinkedIn profiles', type: 'outreach' }
+        ];
+        
+        // Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                const section = item.dataset.section;
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                document.getElementById(section).classList.add('active');
+            });
+        });
+        
+        function showSection(sectionId) {
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            document.querySelector(`[data-section="${sectionId}"]`).classList.add('active');
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+        }
+        
+        // Render playbooks
+        function renderPlaybooks() {
+            const grid = document.getElementById('playbooks-grid');
+            grid.innerHTML = playbooks.map(p => `
+                <div class="playbook-card">
+                    <h3>${p.name}</h3>
+                    <div class="use-case">${p.useCase}</div>
+                    <div class="price">$${p.price}</div>
+                    <div class="upsell">↑ Upsell: ${p.upsell}</div>
+                    <div style="margin-top: 12px;">
+                        <span class="badge ${p.status}">${p.status}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Render emails
+        function renderEmails() {
+            const table = document.getElementById('emails-table');
+            const rows = emails.map(e => `
+                <tr>
+                    <td>${e.name}</td>
+                    <td>${e.playbook}</td>
+                    <td>${e.step}</td>
+                    <td><span class="badge ${e.status}">${e.status}</span></td>
+                    <td><button class="btn btn-secondary">Preview</button></td>
+                </tr>
+            `).join('');
+            table.innerHTML = `<tr><th>Template Name</th><th>Playbook</th><th>Sequence Step</th><th>Status</th><th>Actions</th></tr>${rows}`;
+        }
+        
+        // Render landings
+        function renderLandings() {
+            const table = document.getElementById('landings-table');
+            const rows = landings.map(l => `
+                <tr>
+                    <td>${l.name}</td>
+                    <td>${l.playbook}</td>
+                    <td>${l.price}</td>
+                    <td>${l.url}</td>
+                    <td><span class="badge ${l.status}">${l.status}</span></td>
+                </tr>
+            `).join('');
+            table.innerHTML = `<tr><th>Page Name</th><th>Playbook</th><th>Price</th><th>URL</th><th>Status</th></tr>${rows}`;
+        }
+        
+        // Render tasks
+        function renderTasks() {
+            const table = document.getElementById('tasks-table');
+            const rows = tasks.map(t => `
+                <tr>
+                    <td>${t.task}</td>
+                    <td><span class="badge ${t.priority === 'P0' ? 'pending' : 'draft'}">${t.priority}</span></td>
+                    <td><span class="badge ${t.status === 'done' ? 'ready' : t.status === 'in-progress' ? 'pending' : 'draft'}">${t.status}</span></td>
+                    <td>${t.due}</td>
+                    <td>${t.notes}</td>
+                </tr>
+            `).join('');
+            table.innerHTML = `<tr><th>Task</th><th>Priority</th><th>Status</th><th>Due</th><th>Notes</th></tr>${rows}`;
+            document.getElementById('tasks-value').textContent = tasks.filter(t => t.status !== 'done').length;
+        }
+        
+        // Render approvals
+        function renderApprovals() {
+            const list = document.getElementById('approvals-list');
+            if (approvals.length === 0) {
+                list.innerHTML = '<div class="empty-state"><div class="icon">✅</div><p>No pending approvals</p></div>';
+                return;
+            }
+            list.innerHTML = approvals.map(a => `
+                <div class="approval-item">
+                    <div class="approval-info">
+                        <h4>${a.title}</h4>
+                        <p>${a.desc}</p>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-success" onclick="approve(${a.id})">Approve</button>
+                        <button class="btn btn-warning">Review</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function approve(id) {
+            const index = approvals.findIndex(a => a.id === id);
+            if (index > -1) {
+                approvals.splice(index, 1);
+                renderApprovals();
+            }
+        }
+        
+        // Initialize
+        renderPlaybooks();
+        renderEmails();
+        renderLandings();
+        renderTasks();
+        renderApprovals();
+    </script>
+</body>
+</html>

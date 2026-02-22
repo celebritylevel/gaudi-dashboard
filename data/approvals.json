@@ -1,0 +1,43 @@
+{
+  "approvals": [
+    {
+      "id": "approval-1",
+      "title": "Landing Pages Deployment",
+      "description": "Deploy 3 landing pages to Cloudflare Pages with free domain",
+      "type": "deployment",
+      "status": "pending",
+      "items": [
+        "ai-video-factory landing page",
+        "ai-ad-manager landing page",
+        "ai-creative-machine landing page"
+      ],
+      "createdAt": "2026-02-22T12:00:00Z"
+    },
+    {
+      "id": "approval-2",
+      "title": "Email Campaigns Launch",
+      "description": "Start Instantly sequences for all 3 playbooks once leads are scraped",
+      "type": "campaign",
+      "status": "pending",
+      "items": [
+        "AI Video Factory sequence (3 emails)",
+        "AI Ad Manager sequence (2 emails)",
+        "AI Creative Machine sequence (1 email)"
+      ],
+      "createdAt": "2026-02-22T12:00:00Z"
+    },
+    {
+      "id": "approval-3",
+      "title": "Lead Outreach",
+      "description": "Begin outreach to scraped LinkedIn profiles",
+      "type": "outreach",
+      "status": "pending",
+      "items": [
+        "Scrape commenters from 3 viral posts",
+        "Verify emails via MillionVerifier",
+        "Add to Instantly campaigns"
+      ],
+      "createdAt": "2026-02-22T12:00:00Z"
+    }
+  ]
+}

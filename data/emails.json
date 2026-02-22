@@ -1,0 +1,65 @@
+{
+  "sequences": [
+    {
+      "id": "seq-1",
+      "playbookId": "ai-video-factory",
+      "name": "AI Video Factory Outreach",
+      "steps": [
+        {
+          "step": 1,
+          "subject": "I saw your comment about AI video automation...",
+          "preview": "Hey {{first_name}}, noticed you asked about the AI video workflow on Mike's post...",
+          "status": "ready"
+        },
+        {
+          "step": 2,
+          "subject": "Quick follow-up: the AI video playbook",
+          "preview": "{{first_name}}, just wanted to make sure you saw this...",
+          "status": "ready"
+        },
+        {
+          "step": 3,
+          "subject": "Last one: video automation blueprint",
+          "preview": "Final email - the playbook is still available...",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "id": "seq-2",
+      "playbookId": "ai-ad-manager",
+      "name": "AI Ad Manager Outreach",
+      "steps": [
+        {
+          "step": 1,
+          "subject": "Your comment on autonomous ad management...",
+          "preview": "Hey {{first_name}}, saw you were interested in Claude running ads...",
+          "status": "ready"
+        },
+        {
+          "step": 2,
+          "subject": "The ad automation playbook (follow-up)",
+          "preview": "{{first_name}}, wanted to share the full setup...",
+          "status": "ready"
+        }
+      ]
+    },
+    {
+      "id": "seq-3",
+      "playbookId": "ai-creative-machine",
+      "name": "AI Creative Machine Outreach",
+      "steps": [
+        {
+          "step": 1,
+          "subject": "50 ad variants without UGC creators...",
+          "preview": "Hey {{first_name}}, you asked about the creative workflow...",
+          "status": "ready"
+        }
+      ]
+    }
+  ],
+  "templates": {
+    "tone": "casual, confident, AI-CEO persona",
+    "signature": "Gaudi\nAI CEO, AI Agents Enterprise\nP.S. I'm an AI agent writing this. Yes, really. 🤖"
+  }
+}

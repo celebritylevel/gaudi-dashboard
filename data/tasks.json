@@ -1,0 +1,58 @@
+{
+  "tasks": [
+    {
+      "id": "task-1",
+      "title": "Deploy landing pages to Cloudflare",
+      "priority": "P0",
+      "status": "in_progress",
+      "due": "2026-02-22",
+      "notes": "Creating repos and pushing",
+      "assignee": "Gaudi"
+    },
+    {
+      "id": "task-2",
+      "title": "Create Stripe products for playbooks",
+      "priority": "P0",
+      "status": "todo",
+      "due": "2026-02-22",
+      "notes": "Need to configure checkout links",
+      "assignee": "Gaudi"
+    },
+    {
+      "id": "task-3",
+      "title": "Scrape LinkedIn post commenters",
+      "priority": "P1",
+      "status": "todo",
+      "due": "2026-02-22",
+      "notes": "Use Apify to extract profiles from viral posts",
+      "assignee": "SubAgent-LeadGen"
+    },
+    {
+      "id": "task-4",
+      "title": "Verify emails with MillionVerifier",
+      "priority": "P1",
+      "status": "blocked",
+      "due": "2026-02-22",
+      "notes": "Waiting for leads to be scraped",
+      "assignee": "Gaudi"
+    },
+    {
+      "id": "task-5",
+      "title": "Setup Instantly campaigns",
+      "priority": "P1",
+      "status": "todo",
+      "due": "2026-02-22",
+      "notes": "Configure email sequences",
+      "assignee": "Gaudi"
+    },
+    {
+      "id": "task-6",
+      "title": "Get approval for campaigns",
+      "priority": "P0",
+      "status": "todo",
+      "due": "2026-02-22",
+      "notes": "Present to operator for final approval",
+      "assignee": "Gaudi"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "leads": [],
+  "sources": [
+    {
+      "id": "post-1",
+      "url": "https://www.linkedin.com/posts/mike-futia-108709126_ai-animated-videos-are-going-super-viral-ugcPost-7431035884747206656-tWMP",
+      "title": "AI animated videos are going super viral",
+      "author": "Mike Futia",
+      "playbookId": "ai-video-factory",
+      "status": "pending_scrape"
+    },
+    {
+      "id": "post-2",
+      "url": "https://www.linkedin.com/posts/jayant-joshi-0883a6185_claude-just-dropped-cowork-with-computer-share-7431005579575304193-8sUL",
+      "title": "Claude just dropped Cowork with Computer Use",
+      "author": "Jayant Joshi",
+      "playbookId": "ai-ad-manager",
+      "status": "pending_scrape"
+    },
+    {
+      "id": "post-3",
+      "url": "https://www.linkedin.com/posts/nayinan_50-ad-variations-500-per-ugc-creator-share-7429628529144930304-RHaT",
+      "title": "50 ad variations × $500 per UGC creator",
+      "author": "Yinan (Steven) Na",
+      "playbookId": "ai-creative-machine",
+      "status": "pending_scrape"
+    }
+  ],
+  "stats": {
+    "totalFound": 0,
+    "verified": 0,
+    "readyForOutreach": 0,
+    "contacted": 0,
+    "responded": 0,
+    "purchased": 0
+  }
+}
