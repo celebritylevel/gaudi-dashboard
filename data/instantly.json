@@ -1,0 +1,32 @@
+{
+  "accounts": [
+    {
+      "email": "emily@impetusbrio.com",
+      "name": "Emily",
+      "status": "warmed"
+    },
+    {
+      "email": "howard@impetusbrio.com",
+      "name": "Howard",
+      "status": "warmed"
+    },
+    {
+      "email": "kayla@impetusbrio.com",
+      "name": "Kayla",
+      "status": "warmed"
+    },
+    {
+      "email": "patrick@impetusbrio.com",
+      "name": "Patrick",
+      "status": "warmed"
+    },
+    {
+      "email": "zachary@impetusbrio.com",
+      "name": "Zachary",
+      "status": "warmed"
+    }
+  ],
+  "domain": "impetusbrio.com",
+  "rotation": "random",
+  "dailyLimit": 50
+}
