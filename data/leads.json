@@ -33,6 +33,8 @@
     "withoutEmail": 14,
     "trackHub": 10,
     "trackPlaybook": 14,
-    "readyForOutreach": 10
+    "readyForOutreach": 10,
+    "campaignReady": true,
+    "campaignLink": "/campaigns/implementation-campaign.md"
   }
 }
