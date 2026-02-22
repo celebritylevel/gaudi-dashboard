@@ -70,6 +70,8 @@
         .status-dot.yellow { background: #f59e0b; }
         .status-dot.red { background: #ef4444; }
         .crm-row:hover { background: #1f1f1f; }
+        .tag-checkbox:has(input:checked) { background: rgba(99, 102, 241, 0.2); border-color: #6366f1; }
+        .tag-checkbox:hover { background: #252525; }
     </style>
 </head>
 <body>
@@ -216,11 +218,23 @@
                     <div style="margin-top: 16px;">
                         <input type="text" id="linkedin-url-input" placeholder="https://www.linkedin.com/posts/..." 
                             style="width: 100%; padding: 12px 16px; background: #0f0f0f; border: 1px solid #333; border-radius: 8px; color: #e5e5e5; font-size: 14px; margin-bottom: 12px;">
-                        <select id="linkedin-playbook-select" style="width: 100%; padding: 12px 16px; background: #0f0f0f; border: 1px solid #333; border-radius: 8px; color: #e5e5e5; font-size: 14px; margin-bottom: 12px;">
-                            <option value="ai-video-factory">AI Video Factory Playbook ($29)</option>
-                            <option value="ai-ad-manager">AI Ad Manager Playbook ($47)</option>
-                            <option value="ai-creative-machine">AI Creative Machine Playbook ($29)</option>
-                        </select>
+                        <div style="margin-bottom: 12px;">
+                            <label style="color: #888; font-size: 13px; display: block; margin-bottom: 8px;">Select Tags:</label>
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                <label class="tag-checkbox" style="display: flex; align-items: center; gap: 6px; padding: 8px 14px; background: #1a1a1a; border: 1px solid #333; border-radius: 20px; cursor: pointer; transition: all 0.2s;">
+                                    <input type="checkbox" name="linkedin-tag" value="ai-content-creation" style="accent-color: #10b981;">
+                                    <span style="font-size: 13px;">AI Content Creation</span>
+                                </label>
+                                <label class="tag-checkbox" style="display: flex; align-items: center; gap: 6px; padding: 8px 14px; background: #1a1a1a; border: 1px solid #333; border-radius: 20px; cursor: pointer; transition: all 0.2s;">
+                                    <input type="checkbox" name="linkedin-tag" value="meta-ads" style="accent-color: #3b82f6;">
+                                    <span style="font-size: 13px;">Meta Ads</span>
+                                </label>
+                                <label class="tag-checkbox" style="display: flex; align-items: center; gap: 6px; padding: 8px 14px; background: #1a1a1a; border: 1px solid #333; border-radius: 20px; cursor: pointer; transition: all 0.2s;">
+                                    <input type="checkbox" name="linkedin-tag" value="openclaw" style="accent-color: #8b5cf6;">
+                                    <span style="font-size: 13px;">OpenClaw</span>
+                                </label>
+                            </div>
+                        </div>
                         <button class="btn btn-primary" onclick="addLinkedInUrl()" style="width: 100%;">+ Add LinkedIn Post</button>
                     </div>
                 </div>
@@ -231,7 +245,7 @@
                         <button class="btn btn-success" onclick="scrapeAllLinkedIn()">🚀 Scrape All</button>
                     </div>
                     <table id="linkedin-table">
-                        <tr><th>Post URL</th><th>Playbook</th><th>Status</th><th>Leads</th><th>Actions</th></tr>
+                        <tr><th>Post URL</th><th>Tags</th><th>Status</th><th>Leads</th><th>Actions</th></tr>
                         <!-- Populated by JS -->
                     </table>
                 </div>
@@ -240,7 +254,7 @@
                     <div class="card-title" style="margin-bottom: 16px;">💡 How It Works</div>
                     <ol style="color: #888; line-height: 1.8; padding-left: 20px;">
                         <li>Paste a LinkedIn post URL (viral posts with comments work best)</li>
-                        <li>Select which playbook to promote to commenters</li>
+                        <li>Select tags that match the post topic (AI Content Creation, Meta Ads, OpenClaw)</li>
                         <li>Click "Scrape All" to extract commenter profiles</li>
                         <li>Review leads in the CRM section</li>
                         <li>Approve outreach to send emails</li>
@@ -370,9 +384,9 @@
         
         // LinkedIn URLs for scraping
         let linkedInUrls = [
-            { id: 1, url: 'https://www.linkedin.com/posts/mike-futia-108709126_ai-animated-videos-are-going-super-viral-ugcPost-7431035884747206656-tWMP', playbook: 'ai-video-factory', status: 'ready', leads: 0 },
-            { id: 2, url: 'https://www.linkedin.com/posts/jayant-joshi-0883a6185_claude-just-dropped-cowork-with-computer-share-7431005579575304193-8sUL', playbook: 'ai-ad-manager', status: 'ready', leads: 0 },
-            { id: 3, url: 'https://www.linkedin.com/posts/nayinan_50-ad-variations-500-per-ugc-creator-share-7429628529144930304-RHaT', playbook: 'ai-creative-machine', status: 'ready', leads: 0 }
+            { id: 1, url: 'https://www.linkedin.com/posts/mike-futia-108709126_ai-animated-videos-are-going-super-viral-ugcPost-7431035884747206656-tWMP', tags: ['ai-content-creation'], status: 'ready', leads: 0 },
+            { id: 2, url: 'https://www.linkedin.com/posts/jayant-joshi-0883a6185_claude-just-dropped-cowork-with-computer-share-7431005579575304193-8sUL', tags: ['ai-content-creation'], status: 'ready', leads: 0 },
+            { id: 3, url: 'https://www.linkedin.com/posts/nayinan_50-ad-variations-500-per-ugc-creator-share-7429628529144930304-RHaT', tags: ['meta-ads'], status: 'ready', leads: 0 }
         ];
         
         let nextLinkedInId = 4;
@@ -489,9 +503,11 @@
         // LinkedIn functions
         function addLinkedInUrl() {
             const urlInput = document.getElementById('linkedin-url-input');
-            const playbookSelect = document.getElementById('linkedin-playbook-select');
             const url = urlInput.value.trim();
-            const playbook = playbookSelect.value;
+            
+            // Get selected tags
+            const tagCheckboxes = document.querySelectorAll('input[name="linkedin-tag"]:checked');
+            const tags = Array.from(tagCheckboxes).map(cb => cb.value);
             
             if (!url) {
                 alert('Please enter a LinkedIn post URL');
@@ -503,15 +519,22 @@
                 return;
             }
             
+            if (tags.length === 0) {
+                alert('Please select at least one tag');
+                return;
+            }
+            
             linkedInUrls.push({
                 id: nextLinkedInId++,
                 url: url,
-                playbook: playbook,
+                tags: tags,
                 status: 'pending',
                 leads: 0
             });
             
             urlInput.value = '';
+            // Uncheck all tags
+            document.querySelectorAll('input[name="linkedin-tag"]').forEach(cb => cb.checked = false);
             renderLinkedInTable();
             
             // Also save to localStorage for persistence
@@ -532,10 +555,15 @@
         
         function renderLinkedInTable() {
             const table = document.getElementById('linkedin-table');
-            const playbookNames = {
-                'ai-video-factory': 'AI Video Factory ($29)',
-                'ai-ad-manager': 'AI Ad Manager ($47)',
-                'ai-creative-machine': 'AI Creative Machine ($29)'
+            const tagColors = {
+                'ai-content-creation': { bg: 'rgba(16, 185, 129, 0.2)', border: '#10b981', color: '#6ee7b7' },
+                'meta-ads': { bg: 'rgba(59, 130, 246, 0.2)', border: '#3b82f6', color: '#93c5fd' },
+                'openclaw': { bg: 'rgba(139, 92, 246, 0.2)', border: '#8b5cf6', color: '#c4b5fd' }
+            };
+            const tagNames = {
+                'ai-content-creation': 'AI Content Creation',
+                'meta-ads': 'Meta Ads',
+                'openclaw': 'OpenClaw'
             };
             
             if (linkedInUrls.length === 0) {
@@ -543,16 +571,22 @@
                 return;
             }
             
-            const rows = linkedInUrls.map(l => `
+            const rows = linkedInUrls.map(l => {
+                const tagsHtml = l.tags.map(tag => {
+                    const colors = tagColors[tag] || { bg: '#333', border: '#666', color: '#aaa' };
+                    return `<span style="display: inline-block; padding: 4px 10px; background: ${colors.bg}; border: 1px solid ${colors.border}; border-radius: 12px; font-size: 12px; color: ${colors.color}; margin-right: 4px;">${tagNames[tag] || tag}</span>`;
+                }).join('');
+                
+                return `
                 <tr>
                     <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis;"><a href="${l.url}" target="_blank" style="color: #6366f1;">${l.url.substring(0, 50)}...</a></td>
-                    <td>${playbookNames[l.playbook] || l.playbook}</td>
+                    <td>${tagsHtml}</td>
                     <td><span class="badge ${l.status === 'ready' ? 'ready' : l.status === 'scraping' ? 'pending' : 'draft'}">${l.status}</span></td>
                     <td>${l.leads}</td>
                     <td><button class="btn btn-secondary" onclick="removeLinkedInUrl(${l.id})">Remove</button></td>
                 </tr>
-            `).join('');
-            table.innerHTML = `<tr><th>Post URL</th><th>Playbook</th><th>Status</th><th>Leads</th><th>Actions</th></tr>${rows}`;
+            `}).join('');
+            table.innerHTML = `<tr><th>Post URL</th><th>Tags</th><th>Status</th><th>Leads</th><th>Actions</th></tr>${rows}`;
         }
         
         // Initialize
