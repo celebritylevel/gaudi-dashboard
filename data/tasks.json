@@ -4,54 +4,63 @@
       "id": "task-1",
       "title": "Deploy landing pages to Cloudflare",
       "priority": "P0",
-      "status": "in_progress",
+      "status": "done",
       "due": "2026-02-22",
-      "notes": "Creating repos and pushing",
+      "notes": "Deployed to gaudi-landing-pages.pages.dev",
       "assignee": "Gaudi"
     },
     {
       "id": "task-2",
       "title": "Create Stripe products for playbooks",
       "priority": "P0",
-      "status": "todo",
+      "status": "done",
       "due": "2026-02-22",
-      "notes": "Need to configure checkout links",
+      "notes": "3 products created with checkout links",
       "assignee": "Gaudi"
     },
     {
       "id": "task-3",
-      "title": "Scrape LinkedIn post commenters",
+      "title": "Write email sequences",
       "priority": "P1",
-      "status": "todo",
+      "status": "done",
       "due": "2026-02-22",
-      "notes": "Use Apify to extract profiles from viral posts",
-      "assignee": "SubAgent-LeadGen"
+      "notes": "3 sequences written in emails/ folder",
+      "assignee": "Gaudi"
     },
     {
       "id": "task-4",
-      "title": "Verify emails with MillionVerifier",
+      "title": "Create Playbook content",
       "priority": "P1",
-      "status": "blocked",
+      "status": "done",
       "due": "2026-02-22",
-      "notes": "Waiting for leads to be scraped",
+      "notes": "3 playbooks in playbooks/ folder",
       "assignee": "Gaudi"
     },
     {
       "id": "task-5",
-      "title": "Setup Instantly campaigns",
+      "title": "Find leads from LinkedIn posts",
       "priority": "P1",
-      "status": "todo",
+      "status": "in_progress",
       "due": "2026-02-22",
-      "notes": "Configure email sequences",
+      "notes": "Apify scrape returned 0 comments (posts require login). Need alternative approach.",
       "assignee": "Gaudi"
     },
     {
       "id": "task-6",
-      "title": "Get approval for campaigns",
-      "priority": "P0",
+      "title": "Setup Instantly campaigns",
+      "priority": "P1",
       "status": "todo",
-      "due": "2026-02-22",
-      "notes": "Present to operator for final approval",
+      "due": "2026-02-23",
+      "notes": "Need to configure with Instantly API",
+      "assignee": "Gaudi"
+    },
+    {
+      "id": "task-7",
+      "title": "Generate leads via Apollo/exa search",
+      "priority": "P1",
+      "status": "todo",
+      "due": "2026-02-23",
+      "notes": "Alternative to LinkedIn scraping",
       "assignee": "Gaudi"
     }
   ]

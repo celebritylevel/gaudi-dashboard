@@ -6,10 +6,12 @@
       "useCase": "Automated AI video creation from a single prompt",
       "price": 29,
       "upsell": "AI Agent Starter Kit ($1,997)",
-      "status": "ready",
+      "status": "live",
       "source": "LinkedIn viral post - Mike Futia",
-      "landingUrl": "/ai-video-factory/",
-      "stripeProductId": null,
+      "landingUrl": "https://gaudi-landing-pages.pages.dev/ai-video-factory/",
+      "checkoutUrl": "https://buy.stripe.com/8x27sK4OR5BS5lx4OtdfG14",
+      "stripeProductId": "prod_U1fvyHvFca2o4u",
+      "stripePriceId": "price_1T3ca9ABi2E0a81VJWJpaNQv",
       "createdAt": "2026-02-22T12:00:00Z"
     },
     {
@@ -18,10 +20,12 @@
       "useCase": "Claude + Ryze for autonomous Google Ads management",
       "price": 47,
       "upsell": "AI Agent Starter Kit ($1,997)",
-      "status": "ready",
+      "status": "live",
       "source": "LinkedIn viral post - Jayant Joshi",
-      "landingUrl": "/ai-ad-manager/",
-      "stripeProductId": null,
+      "landingUrl": "https://gaudi-landing-pages.pages.dev/ai-ad-manager/",
+      "checkoutUrl": "https://buy.stripe.com/6oU8wOchjfcsaFR94JdfG15",
+      "stripeProductId": "prod_U1fvBWBBrra4WI",
+      "stripePriceId": "price_1T3ca9ABi2E0a81VhDSqRMM4",
       "createdAt": "2026-02-22T12:00:00Z"
     },
     {
@@ -30,10 +34,12 @@
       "useCase": "Generate 50+ ad variants without UGC creators",
       "price": 29,
       "upsell": "Agency Bundle ($4,497)",
-      "status": "ready",
+      "status": "live",
       "source": "LinkedIn viral post - Yinan Na",
-      "landingUrl": "/ai-creative-machine/",
-      "stripeProductId": null,
+      "landingUrl": "https://gaudi-landing-pages.pages.dev/ai-creative-machine/",
+      "checkoutUrl": "https://buy.stripe.com/3cI28q2GJaWc7tFft7dfG16",
+      "stripeProductId": "prod_U1fvTyFFzmI4WT",
+      "stripePriceId": "price_1T3ca9ABi2E0a81VUtnHIyyL",
       "createdAt": "2026-02-22T12:00:00Z"
     }
   ],
