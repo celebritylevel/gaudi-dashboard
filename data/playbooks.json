@@ -1,76 +1,102 @@
 {
-  "playbooks": [
+  "products": [
     {
-      "id": "ai-video-factory",
-      "name": "AI Video Factory Playbook",
-      "useCase": "Automated AI video creation from a single prompt",
-      "price": 29,
-      "upsell": "AI Agent Starter Kit ($1,997)",
+      "id": "openclaw-quick-start",
+      "name": "OpenClaw Quick Start",
+      "price": 497,
+      "priceType": "one-time",
+      "description": "24-hour OpenClaw setup on your infrastructure",
+      "landingUrl": "https://gaudi-landing-pages.pages.dev/openclaw-implementation/",
+      "checkoutUrl": "https://buy.stripe.com/9B66oG4ORggwbJV6WBdfG18",
+      "stripeProductId": "prod_U1iEuICEPhOhOf",
+      "stripePriceId": "price_1T3eomABi2E0a81V1G1pjL5J",
       "status": "live",
-      "source": "LinkedIn viral post - Mike Futia",
-      "landingUrl": "https://gaudi-landing-pages.pages.dev/ai-video-factory/",
-      "checkoutUrl": "https://buy.stripe.com/8x27sK4OR5BS5lx4OtdfG14",
-      "stripeProductId": "prod_U1fvyHvFca2o4u",
-      "stripePriceId": "price_1T3ca9ABi2E0a81VJWJpaNQv",
-      "createdAt": "2026-02-22T12:00:00Z"
+      "tier": "entry"
     },
     {
-      "id": "ai-ad-manager",
-      "name": "AI Ad Manager Playbook",
-      "useCase": "Claude + Ryze for autonomous Google Ads management",
-      "price": 47,
-      "upsell": "AI Agent Starter Kit ($1,997)",
+      "id": "openclaw-professional",
+      "name": "OpenClaw Professional Setup",
+      "price": 1997,
+      "priceType": "one-time",
+      "description": "Full OpenClaw implementation with custom skills and integrations",
+      "landingUrl": "https://gaudi-landing-pages.pages.dev/openclaw-implementation/",
+      "checkoutUrl": "https://buy.stripe.com/5kQ4gy6WZaWceW75SxdfG19",
+      "stripeProductId": "prod_U1iE8PeviyHqkZ",
+      "stripePriceId": "price_1T3eomABi2E0a81VVpqFy1sa",
       "status": "live",
-      "source": "LinkedIn viral post - Jayant Joshi",
-      "landingUrl": "https://gaudi-landing-pages.pages.dev/ai-ad-manager/",
-      "checkoutUrl": "https://buy.stripe.com/6oU8wOchjfcsaFR94JdfG15",
-      "stripeProductId": "prod_U1fvBWBBrra4WI",
-      "stripePriceId": "price_1T3ca9ABi2E0a81VhDSqRMM4",
-      "createdAt": "2026-02-22T12:00:00Z"
+      "tier": "mid",
+      "featured": true
     },
     {
-      "id": "ai-creative-machine",
-      "name": "AI Creative Machine Playbook",
-      "useCase": "Generate 50+ ad variants without UGC creators",
-      "price": 29,
-      "upsell": "Agency Bundle ($4,497)",
+      "id": "openclaw-enterprise",
+      "name": "OpenClaw Enterprise",
+      "price": 4997,
+      "priceType": "one-time",
+      "description": "Multi-agent OpenClaw setup with CRM/API integrations",
+      "landingUrl": "https://gaudi-landing-pages.pages.dev/openclaw-implementation/",
+      "checkoutUrl": "mailto:gaudi@ai-agents.io?subject=Enterprise",
+      "stripeProductId": "prod_U1iEpcJpNinpIy",
+      "stripePriceId": "price_1T3eonABi2E0a81Vz2ctTwmr",
       "status": "live",
-      "source": "LinkedIn viral post - Yinan Na",
-      "landingUrl": "https://gaudi-landing-pages.pages.dev/ai-creative-machine/",
-      "checkoutUrl": "https://buy.stripe.com/3cI28q2GJaWc7tFft7dfG16",
-      "stripeProductId": "prod_U1fvTyFFzmI4WT",
-      "stripePriceId": "price_1T3ca9ABi2E0a81VUtnHIyyL",
-      "createdAt": "2026-02-22T12:00:00Z"
+      "tier": "enterprise"
     },
     {
       "id": "ai-agents-hub",
       "name": "AI Agents Hub",
-      "useCase": "Community for AI agent builders - Discord access, templates, networking",
       "price": 47,
       "priceType": "monthly",
-      "upsell": "Annual plan (coming soon)",
-      "status": "live",
-      "source": "New product - competitor monetization",
+      "description": "Community for AI agent builders",
       "landingUrl": "https://gaudi-landing-pages.pages.dev/ai-agents-hub/",
       "checkoutUrl": "https://buy.stripe.com/bJe6oG9578O44ht5SxdfG17",
       "discordUrl": "https://discord.gg/NTxzSzjg",
-      "stripeProductId": "prod_U1gNW7Oot1pP2k",
-      "stripePriceId": "price_1T3d1PABi2E0a81VcswPsmya",
-      "createdAt": "2026-02-22T13:50:00Z"
-    }
-  ],
-  "upsellProducts": [
-    {
-      "id": "starter-kit",
-      "name": "AI Agent Starter Kit",
-      "price": 1997,
-      "description": "2-agent setup with full onboarding"
+      "status": "live",
+      "tier": "community"
     },
     {
-      "id": "agency-bundle",
-      "name": "Agency Bundle",
-      "price": 4497,
-      "description": "Multi-client + white-label options"
+      "id": "ai-video-factory",
+      "name": "AI Video Factory Playbook",
+      "price": 29,
+      "priceType": "one-time",
+      "description": "TL;DR guide for AI video automation",
+      "landingUrl": "https://gaudi-landing-pages.pages.dev/ai-video-factory/",
+      "checkoutUrl": "https://buy.stripe.com/8x27sK4OR5BS5lx4OtdfG14",
+      "status": "live",
+      "tier": "playbook"
+    },
+    {
+      "id": "ai-ad-manager",
+      "name": "AI Ad Manager Playbook",
+      "price": 47,
+      "priceType": "one-time",
+      "description": "Claude + Ryze for autonomous ad management",
+      "landingUrl": "https://gaudi-landing-pages.pages.dev/ai-ad-manager/",
+      "checkoutUrl": "https://buy.stripe.com/6oU8wOchjfcsaFR94JdfG15",
+      "status": "live",
+      "tier": "playbook"
+    },
+    {
+      "id": "ai-creative-machine",
+      "name": "AI Creative Machine Playbook",
+      "price": 29,
+      "priceType": "one-time",
+      "description": "Generate 50+ ad variants without UGC creators",
+      "landingUrl": "https://gaudi-landing-pages.pages.dev/ai-creative-machine/",
+      "checkoutUrl": "https://buy.stripe.com/3cI28q2GJaWc7tFft7dfG16",
+      "status": "live",
+      "tier": "playbook"
     }
-  ]
+  ],
+  "strategy": {
+    "primaryFocus": "implementation-services",
+    "febTarget": {
+      "goal": 10000,
+      "path": "5 clients x $1,997 Professional = $9,985",
+      "fallback": "7 clients x $497 Quick Start = $3,479 + 2 x $1,997 = $6,973"
+    },
+    "decTarget": {
+      "goal": 1000000,
+      "path": "Implementation + Managed Services + Community",
+      "breakdown": "50 impl/mo x $2k = $100k, 200 managed x $500 = $100k, 2000 community x $47 = $94k"
+    }
+  }
 }
