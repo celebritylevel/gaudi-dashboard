@@ -1,0 +1,35 @@
+{
+  "linkedInUrls": [
+    {
+      "id": 1,
+      "url": "https://www.linkedin.com/posts/mike-futia-108709126_ai-animated-videos-are-going-super-viral-ugcPost-7431035884747206656-tWMP",
+      "playbook": "ai-video-factory",
+      "status": "ready",
+      "leads": 0,
+      "addedAt": "2026-02-22T13:00:00Z"
+    },
+    {
+      "id": 2,
+      "url": "https://www.linkedin.com/posts/jayant-joshi-0883a6185_claude-just-dropped-cowork-with-computer-share-7431005579575304193-8sUL",
+      "playbook": "ai-ad-manager",
+      "status": "ready",
+      "leads": 0,
+      "addedAt": "2026-02-22T13:00:00Z"
+    },
+    {
+      "id": 3,
+      "url": "https://www.linkedin.com/posts/nayinan_50-ad-variations-500-per-ugc-creator-share-7429628529144930304-RHaT",
+      "playbook": "ai-creative-machine",
+      "status": "ready",
+      "leads": 0,
+      "addedAt": "2026-02-22T13:00:00Z"
+    }
+  ],
+  "instantlyAccounts": [
+    {
+      "id": "pending",
+      "name": "Pending - please provide account names",
+      "status": "warmed"
+    }
+  ]
+}

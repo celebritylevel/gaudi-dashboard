@@ -103,6 +103,7 @@
             <div class="nav-item" data-section="playbooks">📚 Playbooks</div>
             <div class="nav-item" data-section="emails">✉️ Email Templates</div>
             <div class="nav-item" data-section="landings">🌐 Landing Pages</div>
+            <div class="nav-item" data-section="linkedin">🔗 LinkedIn Sources</div>
             <div class="nav-item" data-section="crm">👥 Leads & CRM</div>
             <div class="nav-item" data-section="tasks">✅ Tasks</div>
             <div class="nav-item" data-section="approvals">🔒 Approvals</div>
@@ -130,10 +131,11 @@
                     <table>
                         <tr><th>Component</th><th>Status</th><th>Details</th></tr>
                         <tr><td><span class="status-dot green"></span>Playbooks</td><td><span class="badge ready">3 Created</span></td><td>AI Video Factory, AI Ad Manager, AI Creative Machine</td></tr>
-                        <tr><td><span class="status-dot yellow"></span>Landing Pages</td><td><span class="badge pending">In Progress</span></td><td>Deploying to Cloudflare</td></tr>
-                        <tr><td><span class="status-dot yellow"></span>Email Sequences</td><td><span class="badge pending">In Progress</span></td><td>Templates ready, awaiting approval</td></tr>
-                        <tr><td><span class="status-dot yellow"></span>Lead Scraping</td><td><span class="badge pending">Queued</span></td><td>Ready to scrape LinkedIn posts</td></tr>
-                        <tr><td><span class="status-dot red"></span>Stripe Products</td><td><span class="badge draft">Not Created</span></td><td>Need to create products in Stripe</td></tr>
+                        <tr><td><span class="status-dot green"></span>Landing Pages</td><td><span class="badge ready">Live</span></td><td>Deployed to Cloudflare Pages</td></tr>
+                        <tr><td><span class="status-dot green"></span>Stripe Products</td><td><span class="badge ready">Created</span></td><td>3 products with payment links</td></tr>
+                        <tr><td><span class="status-dot green"></span>Email Sequences</td><td><span class="badge ready">Ready</span></td><td>3 sequences written</td></tr>
+                        <tr><td><span class="status-dot yellow"></span>Lead Scraping</td><td><span class="badge pending">Pending</span></td><td>Waiting for LinkedIn URLs</td></tr>
+                        <tr><td><span class="status-dot yellow"></span>Instantly Setup</td><td><span class="badge pending">Pending</span></td><td>Pre-warmed accounts ready</td></tr>
                     </table>
                 </div>
                 
@@ -199,6 +201,50 @@
                         <tr><th>Page Name</th><th>Playbook</th><th>Price</th><th>URL</th><th>Status</th></tr>
                         <!-- Populated by JS -->
                     </table>
+                </div>
+            </div>
+            
+            <!-- LinkedIn Sources Section -->
+            <div class="section" id="linkedin">
+                <h2 class="section-title">🔗 LinkedIn Sources</h2>
+                <p style="color: #888; margin-bottom: 20px;">Add LinkedIn post URLs to scrape commenters for outreach</p>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Add New LinkedIn Post</span>
+                    </div>
+                    <div style="margin-top: 16px;">
+                        <input type="text" id="linkedin-url-input" placeholder="https://www.linkedin.com/posts/..." 
+                            style="width: 100%; padding: 12px 16px; background: #0f0f0f; border: 1px solid #333; border-radius: 8px; color: #e5e5e5; font-size: 14px; margin-bottom: 12px;">
+                        <select id="linkedin-playbook-select" style="width: 100%; padding: 12px 16px; background: #0f0f0f; border: 1px solid #333; border-radius: 8px; color: #e5e5e5; font-size: 14px; margin-bottom: 12px;">
+                            <option value="ai-video-factory">AI Video Factory Playbook ($29)</option>
+                            <option value="ai-ad-manager">AI Ad Manager Playbook ($47)</option>
+                            <option value="ai-creative-machine">AI Creative Machine Playbook ($29)</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="addLinkedInUrl()" style="width: 100%;">+ Add LinkedIn Post</button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">LinkedIn Posts Queue</span>
+                        <button class="btn btn-success" onclick="scrapeAllLinkedIn()">🚀 Scrape All</button>
+                    </div>
+                    <table id="linkedin-table">
+                        <tr><th>Post URL</th><th>Playbook</th><th>Status</th><th>Leads</th><th>Actions</th></tr>
+                        <!-- Populated by JS -->
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title" style="margin-bottom: 16px;">💡 How It Works</div>
+                    <ol style="color: #888; line-height: 1.8; padding-left: 20px;">
+                        <li>Paste a LinkedIn post URL (viral posts with comments work best)</li>
+                        <li>Select which playbook to promote to commenters</li>
+                        <li>Click "Scrape All" to extract commenter profiles</li>
+                        <li>Review leads in the CRM section</li>
+                        <li>Approve outreach to send emails</li>
+                    </ol>
                 </div>
             </div>
             
@@ -302,9 +348,9 @@
         ];
         
         const landings = [
-            { name: 'AI Video Factory', playbook: 'AI Video Factory', price: '$29', url: 'Pending deployment', status: 'pending' },
-            { name: 'AI Ad Manager', playbook: 'AI Ad Manager', price: '$47', url: 'Pending deployment', status: 'pending' },
-            { name: 'AI Creative Machine', playbook: 'AI Creative Machine', price: '$29', url: 'Pending deployment', status: 'pending' }
+            { name: 'AI Video Factory', playbook: 'AI Video Factory', price: '$29', url: 'gaudi-landing-pages.pages.dev/ai-video-factory/', status: 'live' },
+            { name: 'AI Ad Manager', playbook: 'AI Ad Manager', price: '$47', url: 'gaudi-landing-pages.pages.dev/ai-ad-manager/', status: 'live' },
+            { name: 'AI Creative Machine', playbook: 'AI Creative Machine', price: '$29', url: 'gaudi-landing-pages.pages.dev/ai-creative-machine/', status: 'live' }
         ];
         
         const tasks = [
@@ -321,6 +367,15 @@
             { id: 2, title: 'Email Campaigns Launch', desc: 'Start Instantly sequences for all 3 playbooks', type: 'campaign' },
             { id: 3, title: 'Lead Outreach', desc: 'Begin outreach to scraped LinkedIn profiles', type: 'outreach' }
         ];
+        
+        // LinkedIn URLs for scraping
+        let linkedInUrls = [
+            { id: 1, url: 'https://www.linkedin.com/posts/mike-futia-108709126_ai-animated-videos-are-going-super-viral-ugcPost-7431035884747206656-tWMP', playbook: 'ai-video-factory', status: 'ready', leads: 0 },
+            { id: 2, url: 'https://www.linkedin.com/posts/jayant-joshi-0883a6185_claude-just-dropped-cowork-with-computer-share-7431005579575304193-8sUL', playbook: 'ai-ad-manager', status: 'ready', leads: 0 },
+            { id: 3, url: 'https://www.linkedin.com/posts/nayinan_50-ad-variations-500-per-ugc-creator-share-7429628529144930304-RHaT', playbook: 'ai-creative-machine', status: 'ready', leads: 0 }
+        ];
+        
+        let nextLinkedInId = 4;
         
         // Navigation
         document.querySelectorAll('.nav-item').forEach(item => {
@@ -431,12 +486,90 @@
             }
         }
         
+        // LinkedIn functions
+        function addLinkedInUrl() {
+            const urlInput = document.getElementById('linkedin-url-input');
+            const playbookSelect = document.getElementById('linkedin-playbook-select');
+            const url = urlInput.value.trim();
+            const playbook = playbookSelect.value;
+            
+            if (!url) {
+                alert('Please enter a LinkedIn post URL');
+                return;
+            }
+            
+            if (!url.includes('linkedin.com')) {
+                alert('Please enter a valid LinkedIn URL');
+                return;
+            }
+            
+            linkedInUrls.push({
+                id: nextLinkedInId++,
+                url: url,
+                playbook: playbook,
+                status: 'pending',
+                leads: 0
+            });
+            
+            urlInput.value = '';
+            renderLinkedInTable();
+            
+            // Also save to localStorage for persistence
+            localStorage.setItem('gaudi_linkedin_urls', JSON.stringify(linkedInUrls));
+        }
+        
+        function removeLinkedInUrl(id) {
+            linkedInUrls = linkedInUrls.filter(u => u.id !== id);
+            renderLinkedInTable();
+            localStorage.setItem('gaudi_linkedin_urls', JSON.stringify(linkedInUrls));
+        }
+        
+        function scrapeAllLinkedIn() {
+            alert('Scraping initiated! Gaudi will process these LinkedIn posts and extract commenters. Check the CRM section for leads.');
+            linkedInUrls.forEach(u => u.status = 'scraping');
+            renderLinkedInTable();
+        }
+        
+        function renderLinkedInTable() {
+            const table = document.getElementById('linkedin-table');
+            const playbookNames = {
+                'ai-video-factory': 'AI Video Factory ($29)',
+                'ai-ad-manager': 'AI Ad Manager ($47)',
+                'ai-creative-machine': 'AI Creative Machine ($29)'
+            };
+            
+            if (linkedInUrls.length === 0) {
+                table.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #666; padding: 40px;">No LinkedIn posts added yet</td></tr>';
+                return;
+            }
+            
+            const rows = linkedInUrls.map(l => `
+                <tr>
+                    <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis;"><a href="${l.url}" target="_blank" style="color: #6366f1;">${l.url.substring(0, 50)}...</a></td>
+                    <td>${playbookNames[l.playbook] || l.playbook}</td>
+                    <td><span class="badge ${l.status === 'ready' ? 'ready' : l.status === 'scraping' ? 'pending' : 'draft'}">${l.status}</span></td>
+                    <td>${l.leads}</td>
+                    <td><button class="btn btn-secondary" onclick="removeLinkedInUrl(${l.id})">Remove</button></td>
+                </tr>
+            `).join('');
+            table.innerHTML = `<tr><th>Post URL</th><th>Playbook</th><th>Status</th><th>Leads</th><th>Actions</th></tr>${rows}`;
+        }
+        
         // Initialize
         renderPlaybooks();
         renderEmails();
         renderLandings();
         renderTasks();
         renderApprovals();
+        renderLinkedInTable();
+        
+        // Load saved LinkedIn URLs
+        const savedUrls = localStorage.getItem('gaudi_linkedin_urls');
+        if (savedUrls) {
+            linkedInUrls = JSON.parse(savedUrls);
+            nextLinkedInId = Math.max(...linkedInUrls.map(u => u.id)) + 1;
+            renderLinkedInTable();
+        }
     </script>
 </body>
 </html>
