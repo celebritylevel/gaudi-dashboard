@@ -43,16 +43,17 @@
       "createdAt": "2026-02-22T12:00:00Z"
     },
     {
-      "id": "ai-agents-academy",
-      "name": "AI Agents Academy",
+      "id": "ai-agents-hub",
+      "name": "AI Agents Hub",
       "useCase": "Community for AI agent builders - Discord access, templates, networking",
       "price": 47,
       "priceType": "monthly",
       "upsell": "Annual plan (coming soon)",
       "status": "live",
       "source": "New product - competitor monetization",
-      "landingUrl": "https://gaudi-landing-pages.pages.dev/ai-agents-academy/",
+      "landingUrl": "https://gaudi-landing-pages.pages.dev/ai-agents-hub/",
       "checkoutUrl": "https://buy.stripe.com/bJe6oG9578O44ht5SxdfG17",
+      "discordUrl": "https://discord.gg/NTxzSzjg",
       "stripeProductId": "prod_U1gNW7Oot1pP2k",
       "stripePriceId": "price_1T3d1PABi2E0a81VcswPsmya",
       "createdAt": "2026-02-22T13:50:00Z"
