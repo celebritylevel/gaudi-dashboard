@@ -322,6 +322,19 @@
     </div>
     
     <script>
+        // Initialize Supabase with error handling
+        // Set SUPABASE_URL and SUPABASE_ANON_KEY via environment or replace below
+        const SUPABASE_URL = window.SUPABASE_URL || '';
+        const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || '';
+        let supabase = null;
+        try {
+            if (window.supabase && window.supabase.createClient && SUPABASE_URL && SUPABASE_ANON_KEY) {
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            }
+        } catch (e) {
+            console.warn('Supabase initialization failed:', e.message);
+        }
+
         // Data
         const playbooks = [
             {
@@ -387,15 +400,26 @@
         let linkedInUrls = [];
         let nextLinkedInId = 1;
         
-        // Navigation
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', () => {
-                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-                item.classList.add('active');
-                const section = item.dataset.section;
-                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-                document.getElementById(section).classList.add('active');
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    const section = this.dataset.section;
+                    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                    document.getElementById(section).classList.add('active');
+                });
             });
+            
+            renderPlaybooks();
+            renderEmails();
+            renderLandings();
+            renderTasks();
+            renderApprovals();
+            renderLinkedInTable();
+            loadLinkedInUrls();
         });
         
         function showSection(sectionId) {
@@ -522,6 +546,20 @@
             }
 
             // Save to Supabase
+            if (!supabase) {
+                alert('Supabase not connected. Using local storage.');
+                linkedInUrls.push({
+                    id: nextLinkedInId++,
+                    url: url,
+                    tags: tags,
+                    status: 'pending',
+                    leads_found: 0
+                });
+                renderLinkedInTable();
+                urlInput.value = '';
+                document.querySelectorAll('input[name="linkedin-tag"]').forEach(cb => cb.checked = false);
+                return;
+            }
             supabase
                 .from('linkedin_urls')
                 .insert({
@@ -546,7 +584,12 @@
         }
 
         function removeLinkedInUrl(id) {
-            // Delete from Supabase
+            // Delete from Supabase or local
+            if (!supabase) {
+                linkedInUrls = linkedInUrls.filter(u => u.id !== id);
+                renderLinkedInTable();
+                return;
+            }
             supabase
                 .from('linkedin_urls')
                 .delete()
@@ -587,7 +630,8 @@
             }
             
             const rows = linkedInUrls.map(l => {
-                const tagsHtml = l.tags.map(tag => {
+                const tags = l.tags || [];
+                const tagsHtml = tags.map(tag => {
                     const colors = tagColors[tag] || { bg: '#333', border: '#666', color: '#aaa' };
                     return `<span style="display: inline-block; padding: 4px 10px; background: ${colors.bg}; border: 1px solid ${colors.border}; border-radius: 12px; font-size: 12px; color: ${colors.color}; margin-right: 4px;">${tagNames[tag] || tag}</span>`;
                 }).join('');
@@ -595,38 +639,33 @@
                 return `
                 <tr>
                     <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis;"><a href="${l.url}" target="_blank" style="color: #6366f1;">${l.url.substring(0, 50)}...</a></td>
-                    <td>${tagsHtml}</td>
+                    <td>${tagsHtml || '-'}</td>
                     <td><span class="badge ${l.status === 'ready' ? 'ready' : l.status === 'scraping' ? 'pending' : 'draft'}">${l.status}</span></td>
-                    <td>${l.leads}</td>
+                    <td>${l.leads_found || 0}</td>
                     <td><button class="btn btn-secondary" onclick="removeLinkedInUrl(${l.id})">Remove</button></td>
                 </tr>
             `}).join('');
             table.innerHTML = `<tr><th>Post URL</th><th>Tags</th><th>Status</th><th>Leads</th><th>Actions</th></tr>${rows}`;
         }
         
-        // Initialize
-        renderPlaybooks();
-        renderEmails();
-        renderLandings();
-        renderTasks();
-        renderApprovals();
-        loadLinkedInUrls();
-        renderLinkedInTable();
-        // Load LinkedIn URLs from Supabase
         function loadLinkedInUrls() {
+            if (!supabase) {
+                console.log('Supabase not connected, using local data');
+                renderLinkedInTable();
+                return;
+            }
             supabase
                 .from('linkedin_urls')
                 .select('*')
                 .order('created_at', { ascending: false })
                 .then(({ data, error }) => {
+                    if (error) {
                         console.error('Error loading URLs:', error);
-                        alert('Error loading URLs: ' + error.message);
                         return;
                     }
 
                     if (data && data.length > 0) {
                         linkedInUrls = data;
-                        nextLinkedInId = Math.max(...data.map(u => u.id)) + 1;
                         console.log('✅ Loaded ' + data.length + ' URLs from Supabase');
                     } else {
                         linkedInUrls = [];
@@ -637,6 +676,5 @@
                 })
                 .catch(err => {
                     console.error('Error in loadLinkedInUrls:', err);
-                    alert('Error: ' + err.message);
                 });
         }
