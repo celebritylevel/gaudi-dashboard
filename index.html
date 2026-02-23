@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gaudi Dashboard - AI Agents Enterprise</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; background: #0a0a0a; color: #e5e5e5; min-height: 100vh; }
@@ -383,13 +384,8 @@
         ];
         
         // LinkedIn URLs for scraping
-        let linkedInUrls = [
-            { id: 1, url: 'https://www.linkedin.com/posts/mike-futia-108709126_ai-animated-videos-are-going-super-viral-ugcPost-7431035884747206656-tWMP', tags: ['ai-content-creation'], status: 'ready', leads: 0 },
-            { id: 2, url: 'https://www.linkedin.com/posts/jayant-joshi-0883a6185_claude-just-dropped-cowork-with-computer-share-7431005579575304193-8sUL', tags: ['ai-content-creation'], status: 'ready', leads: 0 },
-            { id: 3, url: 'https://www.linkedin.com/posts/nayinan_50-ad-variations-500-per-ugc-creator-share-7429628529144930304-RHaT', tags: ['meta-ads'], status: 'ready', leads: 0 }
-        ];
-        
-        let nextLinkedInId = 4;
+        let linkedInUrls = [];
+        let nextLinkedInId = 1;
         
         // Navigation
         document.querySelectorAll('.nav-item').forEach(item => {
@@ -497,6 +493,7 @@
             if (index > -1) {
                 approvals.splice(index, 1);
                 renderApprovals();
+        loadLinkedInUrls();
             }
         }
         
@@ -504,47 +501,65 @@
         function addLinkedInUrl() {
             const urlInput = document.getElementById('linkedin-url-input');
             const url = urlInput.value.trim();
-            
+
             // Get selected tags
             const tagCheckboxes = document.querySelectorAll('input[name="linkedin-tag"]:checked');
             const tags = Array.from(tagCheckboxes).map(cb => cb.value);
-            
+
             if (!url) {
                 alert('Please enter a LinkedIn post URL');
                 return;
             }
-            
+
             if (!url.includes('linkedin.com')) {
                 alert('Please enter a valid LinkedIn URL');
                 return;
             }
-            
+
             if (tags.length === 0) {
                 alert('Please select at least one tag');
                 return;
             }
-            
-            linkedInUrls.push({
-                id: nextLinkedInId++,
-                url: url,
-                tags: tags,
-                status: 'pending',
-                leads: 0
-            });
-            
-            urlInput.value = '';
-            // Uncheck all tags
-            document.querySelectorAll('input[name="linkedin-tag"]').forEach(cb => cb.checked = false);
-            renderLinkedInTable();
-            
-            // Also save to localStorage for persistence
-            localStorage.setItem('gaudi_linkedin_urls', JSON.stringify(linkedInUrls));
+
+            // Save to Supabase
+            supabase
+                .from('linkedin_urls')
+                .insert({
+                    url: url,
+                    tags: tags,
+                    status: 'pending',
+                    leads_found: 0
+                })
+                .then(({ data, error }) => {
+                    if (error) {
+                        alert('Error saving URL: ' + error.message);
+                        return;
+                    }
+
+                    // Refresh the table
+                    loadLinkedInUrls();
+                    urlInput.value = '';
+                    // Uncheck all tags
+                    document.querySelectorAll('input[name="linkedin-tag"]').forEach(cb => cb.checked = false);
+                    alert('✅ LinkedIn URL saved successfully!');
+                });
         }
-        
+
         function removeLinkedInUrl(id) {
-            linkedInUrls = linkedInUrls.filter(u => u.id !== id);
-            renderLinkedInTable();
-            localStorage.setItem('gaudi_linkedin_urls', JSON.stringify(linkedInUrls));
+            // Delete from Supabase
+            supabase
+                .from('linkedin_urls')
+                .delete()
+                .eq('id', id)
+                .then(({ error }) => {
+                    if (error) {
+                        alert('Error deleting URL: ' + error.message);
+                        return;
+                    }
+                    // Refresh the table
+                    loadLinkedInUrls();
+                    alert('✅ URL deleted successfully!');
+                });
         }
         
         function scrapeAllLinkedIn() {
@@ -595,15 +610,33 @@
         renderLandings();
         renderTasks();
         renderApprovals();
+        loadLinkedInUrls();
         renderLinkedInTable();
-        
-        // Load saved LinkedIn URLs
-        const savedUrls = localStorage.getItem('gaudi_linkedin_urls');
-        if (savedUrls) {
-            linkedInUrls = JSON.parse(savedUrls);
-            nextLinkedInId = Math.max(...linkedInUrls.map(u => u.id)) + 1;
-            renderLinkedInTable();
+        // Load LinkedIn URLs from Supabase
+        function loadLinkedInUrls() {
+            supabase
+                .from('linkedin_urls')
+                .select('*')
+                .order('created_at', { ascending: false })
+                .then(({ data, error }) => {
+                        console.error('Error loading URLs:', error);
+                        alert('Error loading URLs: ' + error.message);
+                        return;
+                    }
+
+                    if (data && data.length > 0) {
+                        linkedInUrls = data;
+                        nextLinkedInId = Math.max(...data.map(u => u.id)) + 1;
+                        console.log('✅ Loaded ' + data.length + ' URLs from Supabase');
+                    } else {
+                        linkedInUrls = [];
+                        console.log('📭 No URLs in Supabase yet');
+                    }
+
+                    renderLinkedInTable();
+                })
+                .catch(err => {
+                    console.error('Error in loadLinkedInUrls:', err);
+                    alert('Error: ' + err.message);
+                });
         }
-    </script>
-</body>
-</html>
